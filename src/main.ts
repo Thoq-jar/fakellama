@@ -1,11 +1,14 @@
 import OpenAI from "@openai/openai";
-import * as server from "./server.ts";
+import * as serverModule from "./server.ts";
 
-const model = "o3-mini-high";
+const modelName = "o3 Mini (High)";
+const modelId = "o3-mini-2025-01-31";
+const port = 9595;
+const hostname = "127.0.0.1";
 
 const fakeModel: ModelInfo = {
-  name: model,
-  model: model,
+  name: modelName,
+  model: modelName,
   modified_at: new Date().toISOString(),
   size: 4920753328,
   digest: "46e0c10c039e019119339687c3c1757cc81b9da49709a3b3924863ba87ca666e",
@@ -14,7 +17,7 @@ const fakeModel: ModelInfo = {
     format: "gguf",
     family: "o3",
     families: ["o3"],
-    parameter_size: "7B",
+    parameter_size: "32B",
     quantization_level: "Q4_K_M",
   },
 };
@@ -24,7 +27,9 @@ const openai = new OpenAI({
   baseURL: "https://api.openai.com/v1",
 });
 
-Deno.serve(
-  { port: 9595 },
-  (req: Request) => server.handler(req, fakeModel, openai, model),
-);
+// noinspection JSUnusedGlobalSymbols
+Deno.serve({
+  hostname: hostname,
+  port: port,
+  onListen: () => console.log(`Fakellama started @ :${port}`),
+}, (req: Request) => serverModule.handler(req, fakeModel, openai, modelName, modelId));

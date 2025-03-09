@@ -6,6 +6,7 @@ export async function handler(
     fakeModel: ModelInfo,
     openai: OpenAI,
     model: string,
+    modelId: OpenAI.Chat.ChatModel
 ): Promise<Response> {
     const url = new URL(req.url);
 
@@ -25,7 +26,7 @@ export async function handler(
         const body = await req.json() as OpenAIRequest;
 
         const stream = await openai.chat.completions.create({
-            model: "o3-mini-2025-01-31",
+            model: modelId,
             messages: body.messages.map(msg => ({
                 role: msg.role as "user" | "assistant" | "system",
                 content: Array.isArray(msg.content)

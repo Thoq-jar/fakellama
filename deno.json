@@ -1,0 +1,9 @@
+{
+  "tasks": {
+    "dev": "deno run --watch --allow-env --allow-net main.ts"
+  },
+  "imports": {
+    "@openai/openai": "jsr:@openai/openai@^4.86.2",
+    "@std/assert": "jsr:@std/assert@1"
+  }
+}

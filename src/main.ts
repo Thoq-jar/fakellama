@@ -39,7 +39,7 @@ function main() {
     {
       hostname: hostname,
       port: port,
-      onListen: () => console.log(`Fakellama v1 started @ :${port}`),
+      onListen: () => console.log(`Fakellama is running @ :${port}`),
     },
     (req: Request) =>
       serverModule.handler(req, fakeModel, openai, modelName, modelId),

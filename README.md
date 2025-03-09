@@ -14,5 +14,8 @@ export SK_FAKELLAMA_API_KEY=<your-key-here>
 ```
 
 ```shell
-deno task package
+deno task package # Build fakellama
 ```
+
+## License
+This project uses the MIT License, visit the [LICENSE](LICENSE.md) for more info!

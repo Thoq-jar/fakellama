@@ -9,12 +9,18 @@ high, medium and low, but Jetbrains AI doesn't support that.
 - Deno 2.0 or later
 - SK_FAKELLAMA_API_KEY environment variable set to your OpenAI API key
 
+Setup ENV:
 ```shell
 export SK_FAKELLAMA_API_KEY=<your-key-here>
 ```
 
+Build:
 ```shell
 deno task package # Build fakellama
+```
+Or if you want to install:
+```shell
+deno task install:fakellama # Builds and installs fakellama to /usr/local/bin/
 ```
 
 ## License

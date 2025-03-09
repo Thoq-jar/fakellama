@@ -1,7 +1,8 @@
 {
   "tasks": {
     "dev": "deno run --watch --allow-env --allow-net src/main.ts",
-    "package": "deno compile --allow-env --allow-net --output build/fakellama src/main.ts"
+    "package": "deno compile --allow-env --allow-net --output build/fakellama src/main.ts",
+    "install:fakellama": "deno task package && sudo mv build/fakellama /usr/local/bin"
   },
   "imports": {
     "@openai/openai": "jsr:@openai/openai@^4.86.2",

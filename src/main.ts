@@ -1,5 +1,7 @@
 import OpenAI from "@openai/openai";
 import * as serverModule from "./server.ts";
+import { ModelInfo } from "./interface.ts";
+import { LLAMA_ART } from "./ascii-art.ts";
 
 const modelName = "o3 Mini (High)";
 const modelId = "o3-mini-2025-01-31";
@@ -27,9 +29,21 @@ const openai = new OpenAI({
   baseURL: "https://api.openai.com/v1",
 });
 
-// noinspection JSUnusedGlobalSymbols
-Deno.serve({
-  hostname: hostname,
-  port: port,
-  onListen: () => console.log(`Fakellama started @ :${port}`),
-}, (req: Request) => serverModule.handler(req, fakeModel, openai, modelName, modelId));
+function main() {
+  console.log(LLAMA_ART);
+  console.log("Welcome to Fakellama v1!");
+  console.log("Press Ctrl+C to quit.");
+
+  // noinspection JSUnusedGlobalSymbols
+  Deno.serve(
+    {
+      hostname: hostname,
+      port: port,
+      onListen: () => console.log(`Fakellama v1 started @ :${port}`),
+    },
+    (req: Request) =>
+      serverModule.handler(req, fakeModel, openai, modelName, modelId),
+  );
+}
+
+main();

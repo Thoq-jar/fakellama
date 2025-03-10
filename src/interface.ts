@@ -1,3 +1,5 @@
+import OpenAI from "@openai/openai";
+
 interface OpenAIRequest {
   model: string;
   messages: Array<{
@@ -28,4 +30,13 @@ interface ModelInfo {
   details: ModelDetails;
 }
 
-export { type ModelDetails, type ModelInfo, type OpenAIRequest };
+type Providers = "openai";
+type Models = OpenAI.Chat.ChatModel;
+
+export {
+  type Models,
+  type ModelDetails,
+  type ModelInfo,
+  type OpenAIRequest,
+  type Providers,
+};

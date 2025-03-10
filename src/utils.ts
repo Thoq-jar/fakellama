@@ -1,6 +1,6 @@
 import OpenAI from "@openai/openai";
 
-async function* transformToOllamaFormat(
+async function* transformOAIToOllamaFormat(
   stream: AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>,
   model: string,
 ) {
@@ -8,7 +8,7 @@ async function* transformToOllamaFormat(
     const content = chunk.choices[0]?.delta?.content;
     if (content) {
       const ollamaChunk = {
-        model: "o3-mini-high",
+        model: model,
         created_at: new Date().toISOString(),
         message: {
           role: "assistant",
@@ -36,4 +36,4 @@ async function* transformToOllamaFormat(
   yield new TextEncoder().encode(JSON.stringify(final) + "\n");
 }
 
-export { transformToOllamaFormat };
+export { transformOAIToOllamaFormat };

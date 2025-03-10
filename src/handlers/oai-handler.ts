@@ -1,6 +1,6 @@
 import * as utils from "../utils.ts";
 import OpenAI from "@openai/openai";
-import { ModelInfo, Models, OpenAIRequest } from "../interface.ts";
+import { ModelInfo, Models, AIRequest } from "../interface.ts";
 
 export async function handler(
   req: Request,
@@ -33,7 +33,7 @@ export async function handler(
   }
 
   if (req.method === "POST" && url.pathname === "/api/chat") {
-    const body = await req.json() as OpenAIRequest;
+    const body = await req.json() as AIRequest;
     let stream;
 
     if(reason) {

@@ -15,23 +15,6 @@ export function oaiProvider(
         reason = true;
     }
 
-    if (model === "o3-mini" && !reasoningEffortArg) {
-        console.log("Please specify a reasoning effort.");
-        console.log("Usage: fakellama openai o3-mini [high|medium|low]");
-        Deno.exit(1);
-    }
-
-    if (model != "o1" && reasoningEffortArg) {
-        console.warn("This model doesnt support reasoning effort!");
-        console.warn("Ignoring...");
-    } else if (model != "o1-mini" && reasoningEffortArg) {
-        console.warn("This model doesnt support reasoning effort!");
-        console.warn("Ignoring...");
-    } else if (model != "o3-mini" && reasoningEffortArg) {
-        console.warn("This model doesnt support reasoning effort!");
-        console.warn("Ignoring...");
-    }
-
     switch (reasoningEffortArg) {
         case "high": {
             reasoningEffort = "High";

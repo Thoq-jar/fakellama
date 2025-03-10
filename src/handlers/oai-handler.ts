@@ -12,10 +12,17 @@ export async function handler(
   reasoningEffort: OpenAI.ChatCompletionReasoningEffort,
 ): Promise<Response> {
   const url = new URL(req.url);
+  console.log(`${req.method} ${req.url}`);
 
   if (req.method === "GET" && url.pathname === "/") {
     return new Response("Ollama is running", {
       headers: { "Content-Type": "text/plain" },
+    });
+  }
+
+  if (req.method === "POST" && url.pathname === '/api/show') {
+    return new Response(JSON.stringify(fakeModel), {
+      headers: { "Content-Type": "application/json" },
     });
   }
 

@@ -1,17 +1,17 @@
 import OpenAI from "@openai/openai";
 import * as oaiHandler from '../../handlers/oai-handler.ts';
-import {Providers} from "../../interface.ts";
+import {Models, Providers} from "../../interface.ts";
 import {configure, hostname, openai, port} from "../../main.ts";
 
 export function oaiProvider(
-    model: OpenAI.ChatModel,
+    model: Models,
     provider: Providers,
     reasoningEffortArg: OpenAI.ChatCompletionReasoningEffort,
 ) {
     let modelName: string = model;
     let reasoningEffort: string = "medium";
     let reason: boolean = false;
-    if (model == "o3-mini" || "o1" || "o1-mini") {
+    if (model == "o3-mini") {
         reason = true;
     }
 

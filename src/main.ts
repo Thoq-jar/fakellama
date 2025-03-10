@@ -1,15 +1,18 @@
 import OpenAI from "@openai/openai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import * as oai from "./providers/oai/index.ts";
+import * as google from "./providers/google/index.ts";
 import { ModelInfo, Models, Providers } from "./interface.ts";
 import { LLAMA_ART } from "./ascii-art.ts";
 
 export const port = 9595;
 export const hostname = "127.0.0.1";
-
+const API_KEY = Deno.env.get("SK_FAKELLAMA_API_KEY") || ""
 export const openai = new OpenAI({
-  apiKey: Deno.env.get("SK_FAKELLAMA_API_KEY"),
+  apiKey: API_KEY,
   baseURL: "https://api.openai.com/v1",
 });
+export const genAI = new GoogleGenerativeAI(API_KEY);
 
 export function configure(provider: Providers, model: string) {
   switch (provider) {
@@ -30,6 +33,26 @@ export function configure(provider: Providers, model: string) {
           quantization_level: "Q4_K_M",
         },
       };
+      return fakeModel;
+    }
+
+    case "google": {
+      const fakeModel: ModelInfo = {
+        name: model,
+        model: model,
+        modified_at: new Date().toISOString(),
+        size: 4920753328,
+        digest:
+          "46e0c10c039e019119339687c3c1757cc81b9da49709a3b3924863ba87ca666e",
+        details: {
+          parent_model: "",
+          format: "gguf",
+          family: "Gemini",
+          families: ["Google", "Gemini"],
+          parameter_size: "32B",
+          quantization_level: "Q4_K_M",
+        },
+      };
 
       return fakeModel;
     }
@@ -44,6 +67,9 @@ const officiallySupportedModels: { [provider in Providers]: Models[] } = {
     "gpt-3.5-turbo",
     "chatgpt-4o-latest",
   ],
+  google: [
+    "gemini-2.0-flash",
+  ]
 };
 
 function printAvailableModels() {
@@ -61,16 +87,24 @@ function printAvailableModels() {
   }
 }
 
+function printHelp(exit: boolean, reason?: boolean) {
+  console.log(`Usage: fakellama [provider] [model] ${reason ? '[low|medium|high]' : ""}`);
+  printAvailableModels();
+  if (exit) Deno.exit(1);
+}
+
 function main(args: string[]) {
   if (args.length < 2) {
-    console.log("Usage: fakellama [provider] [model]");
-    printAvailableModels();
-    Deno.exit(1);
+    printHelp(true);
   }
 
   const provider: Providers = args[0] as Providers;
   const model: Models = args[1] as Models;
   const reasoningEffortArg = args[2] as OpenAI.ChatCompletionReasoningEffort;
+
+  if (!provider) printHelp(true);
+  if (!model) printHelp(true);
+  if (model == "o3-mini" && !reasoningEffortArg) printHelp(true, true);
 
   console.log(LLAMA_ART);
   console.log("Welcome to Fakellama v1!");
@@ -78,8 +112,13 @@ function main(args: string[]) {
 
   switch (provider) {
     case "openai": {
+      console.log(`Using ${model} ${reasoningEffortArg ? `${reasoningEffortArg}` : ""}`);
       oai.oaiProvider(model, provider, reasoningEffortArg);
       break;
+    }
+    case "google": {
+      console.log(`Using ${model}`);
+      google.googleProvider(model, provider)
     }
   }
 }

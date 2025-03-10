@@ -1,6 +1,7 @@
 import OpenAI from "@openai/openai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-interface OpenAIRequest {
+interface AIRequest {
   model: string;
   messages: Array<{
     role: string;
@@ -30,13 +31,13 @@ interface ModelInfo {
   details: ModelDetails;
 }
 
-type Providers = "openai";
-type Models = OpenAI.Chat.ChatModel;
+type Providers = "openai" | "google";
+type Models = OpenAI.Chat.ChatModel | "gemini-2.0-flash";
 
 export {
   type Models,
   type ModelDetails,
   type ModelInfo,
-  type OpenAIRequest,
+  type AIRequest,
   type Providers,
 };

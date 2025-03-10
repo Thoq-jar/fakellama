@@ -36,4 +36,35 @@ async function* transformOAIToOllamaFormat(
   yield new TextEncoder().encode(JSON.stringify(final) + "\n");
 }
 
-export { transformOAIToOllamaFormat };
+async function* transformGoogleToOllamaFormat(
+  stream: string,
+  model: string,
+) {
+  const ollamaChunk = {
+    model: model,
+    created_at: new Date().toISOString(),
+    message: {
+      role: "assistant",
+      content: stream,
+    },
+    done: false,
+  };
+  yield new TextEncoder().encode(JSON.stringify(ollamaChunk) + "\n");
+
+  const final = {
+    model,
+    created_at: new Date().toISOString(),
+    message: { role: "assistant", content: "" },
+    done_reason: "stop", 
+    done: true,
+    total_duration: 0,
+    load_duration: 0,
+    prompt_eval_count: 0,
+    prompt_eval_duration: 0,
+    eval_count: 0,
+    eval_duration: 0,
+  };
+  yield new TextEncoder().encode(JSON.stringify(final) + "\n");
+}
+
+export { transformOAIToOllamaFormat, transformGoogleToOllamaFormat };

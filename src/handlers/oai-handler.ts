@@ -1,13 +1,13 @@
 import * as utils from "../utils.ts";
 import OpenAI from "@openai/openai";
-import { ModelInfo, OpenAIRequest } from "../interface.ts";
+import { ModelInfo, Models, OpenAIRequest } from "../interface.ts";
 
 export async function handler(
   req: Request,
   fakeModel: ModelInfo,
   openai: OpenAI,
   modelName: string,
-  modelId: OpenAI.Chat.ChatModel,
+  modelId: Models,
   reason: boolean,
   reasoningEffort: OpenAI.ChatCompletionReasoningEffort,
 ): Promise<Response> {

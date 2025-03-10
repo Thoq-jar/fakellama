@@ -4,6 +4,7 @@
     "jsr:@openai/openai@^4.86.2": "4.86.2",
     "jsr:@std/assert@1": "1.0.11",
     "jsr:@std/internal@^1.0.5": "1.0.5",
+    "npm:@google/generative-ai@0.24": "0.24.0",
     "npm:openai@*": "4.86.2_zod@3.24.2",
     "npm:openai@4.86.2": "4.86.2_zod@3.24.2",
     "npm:zod@3": "3.24.2"
@@ -26,6 +27,9 @@
     }
   },
   "npm": {
+    "@google/generative-ai@0.24.0": {
+      "integrity": "sha512-fnEITCGEB7NdX0BhoYZ/cq/7WPZ1QS5IzJJfC3Tg/OwkvBetMiVJciyaan297OvE4B9Jg1xvo0zIazX/9sGu1Q=="
+    },
     "@types/node-fetch@2.6.12": {
       "integrity": "sha512-8nneRWKCg3rMtF69nLQJnOYUcbafYeFSjqkw3jCRLsqkWFlHaoQrr5mXmofFGOx3DKn7UfmBMyov8ySvLRVldA==",
       "dependencies": [
@@ -249,7 +253,8 @@
   "workspace": {
     "dependencies": [
       "jsr:@openai/openai@^4.86.2",
-      "jsr:@std/assert@1"
+      "jsr:@std/assert@1",
+      "npm:@google/generative-ai@0.24"
     ]
   }
 }

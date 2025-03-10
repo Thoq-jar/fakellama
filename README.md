@@ -23,5 +23,17 @@ Or if you want to install:
 deno task install:fakellama # Builds and installs fakellama to /usr/local/bin/
 ```
 
+Test:
+```shell
+ curl http://localhost:9595/api/chat   -H "Content-Type: application/json"   -d '{
+    "model": "<model here>",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Hello!"        
+      }
+    ]
+  }'
+```
 ## License
 This project uses the MIT License, visit the [LICENSE](LICENSE.md) for more info!

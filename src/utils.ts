@@ -1,4 +1,5 @@
 import OpenAI from "@openai/openai";
+import { GenerateContentResponse } from "@google/generative-ai";
 
 async function* transformOAIToOllamaFormat(
   stream: AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>,
@@ -37,19 +38,32 @@ async function* transformOAIToOllamaFormat(
 }
 
 async function* transformGoogleToOllamaFormat(
-  stream: string,
+  response: GenerateContentResponse,
   model: string,
 ) {
-  const ollamaChunk = {
-    model: model,
-    created_at: new Date().toISOString(),
-    message: {
-      role: "assistant",
-      content: stream,
-    },
-    done: false,
-  };
-  yield new TextEncoder().encode(JSON.stringify(ollamaChunk) + "\n");
+  if( !response.candidates || response.candidates.length === 0) {
+    console.log("Error: No candidates found in the response.");
+    return;
+  }
+
+  const content = response.candidates[0]?.content?.parts || "";
+  
+  const chunks = [content];
+  
+  for (const chunk of chunks) {
+    if (chunk) {
+      const ollamaChunk = {
+        model: model,
+        created_at: new Date().toISOString(),
+        message: {
+          role: "assistant",
+          content: chunk,
+        },
+        done: false,
+      };
+      yield new TextEncoder().encode(JSON.stringify(ollamaChunk) + "\n");
+    }
+  }
 
   const final = {
     model,

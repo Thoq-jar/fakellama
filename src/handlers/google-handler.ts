@@ -42,9 +42,8 @@ export async function handler(
     const model = genAI.getGenerativeModel({ model: modelId });
     const result = await model.generateContent(messages);
     const response = await result.response;
-    const stream = response.text();
 
-    return new Response(utils.transformGoogleToOllamaFormat(stream, modelName), {
+    return new Response(utils.transformGoogleToOllamaFormat(response, modelName), {
         headers: {
             "Content-Type": "text/event-stream",
             "Cache-Control": "no-cache",

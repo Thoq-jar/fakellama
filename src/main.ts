@@ -1,20 +1,20 @@
-import OpenAI from "@openai/openai";
+import OpenAI from "openai";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import * as oai from "./providers/oai/index.ts";
-import * as google from "./providers/google/index.ts";
-import { ModelInfo, Models, Providers } from "./interface.ts";
-import { LLAMA_ART } from "./ascii-art.ts";
+import * as oai from "./providers/oai/index";
+import * as google from "./providers/google/index";
+import { ModelInfo, Models, Providers } from "./interface";
+import { LLAMA_ART } from "./ascii-art";
 
 export const port = 9595;
 export const hostname = "127.0.0.1";
-const API_KEY = Deno.env.get("SK_FAKELLAMA_API_KEY") || ""
+const API_KEY = process.env.SK_FAKELLAMA_API_KEY || ""
 export const openai = new OpenAI({
   apiKey: API_KEY,
   baseURL: "https://api.openai.com/v1",
 });
 export const genAI = new GoogleGenerativeAI(API_KEY);
 
-export function configure(provider: Providers, model: string) {
+export function configure(provider: string, model: string) {
   switch (provider) {
     case "openai": {
       const fakeModel: ModelInfo = {
@@ -64,18 +64,18 @@ const officiallySupportedModels: { [provider in Providers]: Models[] } = {
     "o3-mini",
     "gpt-4o",
     "gpt-4o-mini",
-    "gpt-3.5-turbo",
     "chatgpt-4o-latest",
   ],
   google: [
-    "gemini-2.0-flash",
+    "gemini-2.5-flash",
+    "gemini-2.5-pro",
   ]
 };
 
 function printAvailableModels() {
   console.log(
     "The following models are going to be properly named, " +
-      "any other model will work but the name will just be the id of model.",
+    "any other model will work but the name will just be the id of model.",
   );
   console.log("Officially supported models and providers:");
   for (const provider in officiallySupportedModels) {
@@ -90,10 +90,13 @@ function printAvailableModels() {
 function printHelp(exit: boolean, reason?: boolean) {
   console.log(`Usage: fakellama [provider] [model] ${reason ? '[low|medium|high]' : ""}`);
   printAvailableModels();
-  if (exit) Deno.exit(1);
+  if (exit) process.exit(1);
 }
 
 function main(args: string[]) {
+  args = args.slice(2);
+  console.log(args);
+
   if (args.length < 2) {
     printHelp(true);
   }
@@ -104,7 +107,6 @@ function main(args: string[]) {
 
   if (!provider) printHelp(true);
   if (!model) printHelp(true);
-  if (model == "o3-mini" && !reasoningEffortArg) printHelp(true, true);
 
   console.log(LLAMA_ART);
   console.log("Welcome to Fakellama v1!");
@@ -123,4 +125,5 @@ function main(args: string[]) {
   }
 }
 
-main(Deno.args);
+main(process.argv);
+

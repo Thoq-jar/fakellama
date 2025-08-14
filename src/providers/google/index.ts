@@ -1,34 +1,31 @@
-import * as google from "../../handlers/google-handler.ts";
-import { Providers } from "../../interface.ts";
-import { configure, hostname, port } from "../../main.ts";
-import { genAI } from "../../main.ts";
+import http from "http";
+import * as google from "../../handlers/google-handler";
+import { configure, hostname, port } from "../../main";
 
-function googleProvider(
-  modelId: string,
-  provider: Providers,
-) {
-  let modelName: string = "Gemini";
+function googleProvider(modelId, provider) {
+  let modelName = "Gemini";
 
-  if (genAI.getGenerativeModel({ model: "gemini-2.0-flash" })) {
-    modelName = "Gemini Flash 2.0";
+  switch (modelId) {
+    case "gemini-2.5-pro":
+      modelName = "Gemini 2.5 Pro";
+      break;
+    case "gemini-2.5-flash":
+      modelName = "Gemini 2.5 Flash";
+      break;
+    default:
+      modelName = "Gemini (Unknown)";
+      break;
   }
 
   const fakeModel = configure(provider, modelName);
 
-  Deno.serve(
-    {
-      hostname: hostname,
-      port: port,
-      onListen: () => console.log(`Fakellama is running @ :${port}`),
-    },
-    (req: Request) =>
-      google.handler(
-        req,
-        fakeModel,
-        modelName,
-        modelId,
-      ),
-  );
+  const server = http.createServer((req, res) => {
+      google.handler(req, res, fakeModel, modelName, modelId).then();
+  });
+
+  server.listen(port, hostname, () => {
+    console.log(`Fakellama is running @ :${port}`);
+  });
 }
 
 export { googleProvider };

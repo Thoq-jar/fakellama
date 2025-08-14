@@ -1,0 +1,28 @@
+{
+  "name": "fakellama",
+  "version": "1.0.0",
+  "description": "Trick Ollama apps into using another API. I made this because I wanted to pick between o3-mini high, medium and low, but Jetbrains AI doesn't support that.",
+  "main": "src/main.ts",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Thoq-jar/fakellama.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Thoq-jar/fakellama/issues"
+  },
+  "homepage": "https://github.com/Thoq-jar/fakellama#readme",
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "@types/node": "^24.2.1",
+    "openai": "^5.12.2"
+  }
+}

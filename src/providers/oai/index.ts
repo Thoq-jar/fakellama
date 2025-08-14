@@ -1,17 +1,17 @@
-import OpenAI from "@openai/openai";
-import * as oaiHandler from '../../handlers/oai-handler.ts';
-import {Models, Providers} from "../../interface.ts";
-import {configure, hostname, openai, port} from "../../main.ts";
+import http from "http";
+import * as oai from '../../handlers/oai-handler';
+import { configure, hostname, openai, port } from "../../main";
+import {toModel, toReasoningEffort} from "../../utils";
 
 export function oaiProvider(
-    model: Models,
-    provider: Providers,
-    reasoningEffortArg: OpenAI.ChatCompletionReasoningEffort,
+    model: string,
+    provider: string,
+    reasoningEffortArg: string,
 ) {
-    let modelName: string = model;
-    let reasoningEffort: string = "medium";
-    let reason: boolean = false;
-    if (model == "o3-mini") {
+    let modelName = model;
+    let reasoningEffort = "medium";
+    let reason = false;
+    if (model === "o3-mini") {
         reason = true;
     }
 
@@ -43,10 +43,6 @@ export function oaiProvider(
             modelName = "GPT-4o Mini";
             break;
         }
-        case "gpt-3.5-turbo": {
-            modelName = "GPT-3.5 Turbo";
-            break;
-        }
         case "chatgpt-4o-latest": {
             modelName = "GPT-4o (Latest)";
             break;
@@ -55,23 +51,20 @@ export function oaiProvider(
 
     const fakeModel = configure(provider, modelName);
 
-    Deno.serve(
-        {
-            hostname: hostname,
-            port: port,
-            onListen: () => console.log(`Fakellama is running @ :${port}`),
-        },
-        (req: Request) =>
-            oaiHandler.handler(
-                req,
-                fakeModel,
-                openai,
-                modelName,
-                model,
-                reason,
-                reasoningEffortArg,
-            ),
-    );
-}
+    const server = http.createServer((req, res) => {
+        oai.handler(
+            req,
+            res,
+            fakeModel,
+            openai,
+            modelName,
+            toModel(model),
+            reason,
+            toReasoningEffort(reasoningEffortArg),
+        ).then();
+    });
 
-export { oaiHandler };
+    server.listen(port, hostname, () => {
+        console.log(`Fakellama is running @ :${port}`);
+    });
+}

@@ -1,5 +1,4 @@
-import OpenAI from "@openai/openai";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import OpenAI from "openai";
 
 interface AIRequest {
   model: string;
@@ -32,7 +31,8 @@ interface ModelInfo {
 }
 
 type Providers = "openai" | "google";
-type Models = OpenAI.Chat.ChatModel | "gemini-2.0-flash";
+type Models = OpenAI.Chat.ChatModel | "gemini-2.5-pro" | "gemini-2.5-flash";
+type ReasoningEffort = OpenAI.ChatCompletionReasoningEffort;
 
 export {
   type Models,
@@ -40,4 +40,5 @@ export {
   type ModelInfo,
   type AIRequest,
   type Providers,
+  type ReasoningEffort,
 };

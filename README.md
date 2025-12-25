@@ -4,6 +4,9 @@ Trick Ollama apps into using another API.
 I made this because I wanted to pick between o3-mini
 high, medium and low, but Jetbrains AI doesn't support that.
 
+> Note: It does now but i stopped using Jetbrains AI so uuuh
+
+
 ## Setup
 ### Prerequisites:
 - Deno 2.0 or later
